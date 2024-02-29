@@ -51,17 +51,17 @@
                                 </div>
                             </div>
                             {% for category in categories %}
-                            <div class="col-lg-2 col-sm-6">
-                                <div class="item">
-                                    <div class="icon">
-                                        <img src="{% static 'assets/images/icon-01.png' %}" alt="">
-                                    </div>
-                                    <h4 class="text-light">{{ category.name }}</h4>
-                                    <div class="icon-button">
-                                        <a href="#"><i class="fa fa-angle-right"></i></a>
+                                <div class="col-lg-2 col-sm-6">
+                                    <div class="item">
+                                        <div class="icon">
+                                            <img src="{% static 'assets/images/icon-01.png' %}" alt="">
+                                        </div>
+                                        <h4 class="text-light">{{ category.name }}</h4>
+                                        <div class="icon-button">
+                                            <a href="#"><i class="fa fa-angle-right"></i></a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             {% endfor %}
 
                         </div>
@@ -176,37 +176,41 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-12">
-                    <div class="row grid">
-                        <div class="col-lg-6 currently-market-item all msc">
-                            <div class="item">
-                                <div class="left-image">
-                                    <img src="{% static 'assets/images/market-01.jpg' %}" alt=""
-                                         style="border-radius: 20px; min-width: 195px;">
-                                </div>
-                                <div class="right-content">
-                                    <h4>Music Art Super Item</h4>
-                                    <span class="author">
-                    <img src="{% static 'assets/images/author.jpg' %}" alt=""
+                {% for product in page_obj.object_list %}
+                    <div class="col-lg-12">
+                        <div class="row grid">
+                            <div class="col-lg-6 currently-market-item all msc">
+                                <div class="item">
+                                    <div class="left-image" style="width: 200px">
+                                        <img src="{{ product.cover.url }}" alt=""
+                                             style="border-radius: 20px; min-width: 195px;">
+                                    </div>
+                                    <div class="right-content">
+                                        <h4 class="text-light">{{ product.category }} Super Item</h4>
+                                        <span class="author">
+                    <img src="{{ product.author.avatar.url }}" alt=""
                          style="max-width: 50px; border-radius: 50%;">
-                    <h6>Liberty Artist<br><a href="#">@libertyart</a></h6>
+                    <h6>{{ product.author.first_name }} {{ product.author.last_name }}<br><a
+                            href="#">{{ product.author.username }}</a></h6>
                   </span>
-                                    <div class="line-dec"></div>
-                                    <span class="bid">
-                    Current Bid<br><strong>2.03 ETH</strong><br><em>($8,240.50)</em>
+                                        <div class="line-dec"></div>
+                                        <span class="bid">
+                    Current Bid<br><strong>{{ product.price }}</strong><br><em>({{ product.price }})</em>
                   </span>
-                                    <span class="ends">
-                    Ends In<br><strong>4D 08H 15M 42S</strong><br><em>(July 24th, 2022)</em>
+                                        <span class="ends">
+                    Ends In<br><strong>{{ product.end_in }}</strong><br><em>({{ product.end_in }})</em>
                   </span>
-                                    <div class="text-button">
-                                        <a href="details.html">View Item Details</a>
+                                        <div class="text-button">
+                                            <a href="{% url 'main:details' product.pk %}">View Item Details</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
-                </div>
+                {% endfor %}
+            {% include 'main/pagination.html' %}
             </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.timezone import datetime
@@ -12,8 +13,13 @@ from apps.main.models import Product, Category
 def index(request):
     products = Product.objects.all()
     categories = Category.objects.all()
+    size = request.GET.get("size", 4)
+    page = request.GET.get("page", 1)
+    paginator = Paginator(products, size)
+    page_obj = paginator.page(page)
     return render(request, 'index.html',
-                  {'products': products, 'categories': categories})
+                  {'products': products, 'categories': categories, "page_obj": page_obj,
+                   "num_pages": paginator.num_pages})
 
 
 def author(request):
@@ -27,7 +33,7 @@ def create(request):
 def details(request, pk):
     products = Product.objects.all()
     product = Product.objects.get(pk=pk)
-    return render(request, 'main/details.html' , {'product': product, 'products': products})
+    return render(request, 'main/details.html', {'product': product, 'products': products})
 
 
 def explore(request):
